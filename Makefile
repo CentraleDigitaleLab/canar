@@ -36,7 +36,7 @@ install:
 	. .venv/bin/activate && pip install -U pip && pip install -e ".[dev]"
 
 run:
-	. .venv/bin/activate && (canar || streamlit run canar/app/main.py --server.headless true --server.port 8501)
+	. .venv/bin/activate && (canar || streamlit run canar/app/main.py --server.headless true --server.port 8520)
 
 test:
 	. .venv/bin/activate && pytest -q
