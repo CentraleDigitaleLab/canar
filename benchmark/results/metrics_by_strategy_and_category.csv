@@ -1,5 +1,13 @@
-Category,Retrieval Strategy,Hit@10,Recall@10,MRR,Latency(ms),Precision@10,nDCG,Token Cost,Qualitative Notes
-Broad Conceptual Questions,simple_vector,0.5,0.5,0.166667,50.029346,0.05,0.25,1599.5,
-Code-Oriented Questions,simple_vector,0.5,0.5,0.1,61.740486,0.05,0.193426,3441.0,
-No-Answer Questions,simple_vector,,,,46.366458,,,3718.0,
-Technical Documentation,simple_vector,0.4,0.4,0.4,302.214926,0.04,0.4,3131.8,
+Category,Retrieval Strategy,Metric Engine,Hit@10,Recall@10,MRR,Latency(ms),Precision@10,nDCG,Token Cost,Qualitative Notes
+Broad Conceptual Questions,simple_sparse,ranx,0.25,0.25,0.25,6.494341,0.025,0.25,2624.75,
+Code-Oriented Questions,simple_sparse,ranx,1.0,1.0,0.645833,6.992778,0.1,0.732669,2840.75,
+Exact Lookup,simple_sparse,ranx,0.5,0.5,0.25,8.282865,0.05,0.315465,2845.5,
+Multi-Hop Questions,simple_sparse,ranx,0.75,0.541667,0.5,6.553567,0.125,0.433847,3599.25,
+No-Answer Questions,simple_sparse,none,,,,6.68868,,,2871.0,
+Technical Documentation,simple_sparse,ranx,1.0,0.875,0.75,6.209325,0.1,0.754446,3242.0,
+Broad Conceptual Questions,simple_vector,ranx,0.5,0.5,0.25,34.104761,0.05,0.315465,2905.0,
+Code-Oriented Questions,simple_vector,ranx,0.75,0.75,0.375,34.60601,0.075,0.464052,2927.75,
+Exact Lookup,simple_vector,ranx,1.0,1.0,0.708333,351.174177,0.1,0.782732,3044.0,
+Multi-Hop Questions,simple_vector,ranx,0.75,0.583333,0.75,33.549756,0.125,0.59725,2726.5,
+No-Answer Questions,simple_vector,none,,,,34.07414,,,3447.5,
+Technical Documentation,simple_vector,ranx,0.5,0.5,0.375,41.124003,0.05,0.407732,2660.5,

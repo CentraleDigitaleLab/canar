@@ -1,0 +1,47 @@
+{
+  "artifacts": {
+    "metrics_by_category": "benchmark/results/metrics_by_category.csv",
+    "metrics_by_strategy": "benchmark/results/metrics_by_strategy.csv",
+    "metrics_by_strategy_and_category": "benchmark/results/metrics_by_strategy_and_category.csv",
+    "raw_results": "benchmark/results/raw_results.jsonl",
+    "results_dir": "benchmark/results",
+    "runs_dir": "benchmark/runs"
+  },
+  "created_at_utc": "2026-06-17T18:13:53.421046+00:00",
+  "dataset": {
+    "categories": [
+      "Broad Conceptual Questions",
+      "Code-Oriented Questions",
+      "Exact Lookup",
+      "Multi-Hop Questions",
+      "No-Answer Questions",
+      "Technical Documentation"
+    ],
+    "difficulties": [
+      "easy",
+      "hard",
+      "medium"
+    ],
+    "path": "benchmark/benchmark_dataset.example.json",
+    "question_count": 24,
+    "questions_with_ground_truth": 20
+  },
+  "experiment_config": null,
+  "record_count": 48,
+  "retrieval": {
+    "collections": [
+      "utilitr_v2"
+    ],
+    "embed_model": "nomic-embed-text:v1.5",
+    "fastembed_sparse_model": "Qdrant/bm25",
+    "qdrant_url": "http://localhost:6360",
+    "sparse_vector_name": "sparse",
+    "strategies": [
+      "simple_vector",
+      "simple_sparse"
+    ],
+    "top_k": 10,
+    "vector_name": "dense"
+  },
+  "run_id": "run_20260617T181353Z"
+}

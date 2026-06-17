@@ -1,5 +1,7 @@
-Category,Questions,Hit@10,Recall@10,Precision@10,MRR,nDCG@10,Latency Avg(ms),Latency Median(ms),Latency p95(ms),Token Cost
-Broad Conceptual Questions,2,0.5,0.5,0.05,0.166667,0.25,50.029346,50.029346,50.789487,1599.5
-Code-Oriented Questions,2,0.5,0.5,0.05,0.1,0.193426,61.740486,61.740486,69.34848,3441.0
-No-Answer Questions,1,,,,,,46.366458,46.366458,46.366458,3718.0
-Technical Documentation,5,0.4,0.4,0.04,0.4,0.4,302.214926,66.46849,1041.103064,3131.8
+Category,Questions,Metric Engine,Hit@10,Recall@10,Precision@10,MRR,nDCG@10,Latency Avg(ms),Latency Median(ms),Latency p95(ms),Token Cost
+Broad Conceptual Questions,8,ranx,0.375,0.375,0.0375,0.25,0.282732,20.299551,18.232916,38.76779,2764.875
+Code-Oriented Questions,8,ranx,0.875,0.875,0.0875,0.510417,0.59836,20.799394,20.680153,35.199319,2884.25
+Exact Lookup,8,ranx,0.75,0.75,0.075,0.479167,0.549099,179.728521,21.589804,854.787499,2944.75
+Multi-Hop Questions,8,ranx,0.75,0.5625,0.125,0.625,0.515548,20.051661,19.565866,35.251658,3162.875
+No-Answer Questions,8,none,,,,,,20.38141,19.810713,35.50268,3159.25
+Technical Documentation,8,ranx,0.75,0.6875,0.075,0.5625,0.581089,23.666664,19.456175,50.28802,2951.25

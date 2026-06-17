@@ -26,7 +26,7 @@ def main() -> int:
     output_dir = ensure_dir(args.output)
     results_dir = ensure_dir(args.results_output)
 
-    cfg = _build_config()
+    cfg = _build_config(args.strategies)
     collections = tuple(args.collections) if args.collections else None
     if not collections and not tuple(cfg.qdrant_collections):
         dataset_collections = tuple(
@@ -36,7 +36,14 @@ def main() -> int:
 
     all_records: list[dict[str, Any]] = []
     for strategy_name in args.strategies:
-        runner = build_runner(strategy_name, cfg, args.top_k, collections, args.vector_name)
+        runner = build_runner(
+            strategy_name,
+            cfg,
+            args.top_k,
+            collections,
+            args.vector_name,
+            args.sparse_vector_name,
+        )
         strategy_records = _run_strategy(dataset, strategy_name, runner, args.top_k)
         all_records.extend(strategy_records)
         strategy_path = output_dir / f"{strategy_name}.jsonl"
@@ -113,14 +120,14 @@ def _run_strategy(
     return records
 
 
-def _build_config() -> Any:
+def _build_config(strategies: list[str]) -> Any:
     from canar.app.config import AppConfig
 
     cfg = AppConfig()
     missing = []
-    if not cfg.embed_base:
+    if "simple_vector" in strategies and not cfg.embed_base:
         missing.append("EMBED_API_BASE")
-    if not cfg.embed_model:
+    if "simple_vector" in strategies and not cfg.embed_model:
         missing.append("EMBED_MODEL")
     if not cfg.qdrant_url:
         missing.append("QDRANT_URL")
@@ -161,7 +168,9 @@ def _build_run_manifest(
             "collections": list(collections or tuple(cfg.qdrant_collections)),
             "top_k": args.top_k,
             "vector_name": args.vector_name,
+            "sparse_vector_name": args.sparse_vector_name or cfg.qdrant_sparse_vector_name or None,
             "embed_model": cfg.embed_model,
+            "fastembed_sparse_model": cfg.fastembed_sparse_model or None,
             "qdrant_url": cfg.qdrant_url,
         },
         "artifacts": {
@@ -322,8 +331,13 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--vector-name",
-        default=experiment_config.get("vector_name", "dense"),
-        help="Qdrant named vector to query for dense retrieval.",
+        default=experiment_config.get("vector_name"),
+        help="Qdrant named dense vector. Defaults to dense for simple_vector.",
+    )
+    parser.add_argument(
+        "--sparse-vector-name",
+        default=experiment_config.get("sparse_vector_name"),
+        help="Qdrant named sparse vector. Defaults to QDRANT_SPARSE_VECTOR_NAME for simple_sparse.",
     )
     parser.add_argument(
         "--output",

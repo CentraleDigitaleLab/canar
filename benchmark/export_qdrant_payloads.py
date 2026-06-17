@@ -11,7 +11,7 @@ from qdrant_client import QdrantClient
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_COLLECTION = "utilitr_v1"
+DEFAULT_COLLECTION = "utilitr_v2"
 DEFAULT_OUTPUT = PROJECT_ROOT / "benchmark" / "qdrant_payload_export.jsonl"
 
 

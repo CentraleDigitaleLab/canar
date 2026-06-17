@@ -10,7 +10,7 @@ class SimpleVectorRunner:
         cfg: Any,
         top_k: int,
         collections: tuple[str, ...] | None = None,
-        vector_name: str | None = "dense",
+        vector_name: str | None = None,
     ):
         from canar.app.api.embed_client import EmbedClient
         from canar.app.retrieval.adapters.qdrant import QdrantRetrievalAdapter
@@ -21,8 +21,9 @@ class SimpleVectorRunner:
         self.embed_client = EmbedClient(cfg.embed_base, cfg.embed_model, cfg.embed_key)
         profile_collections = collections or tuple(cfg.qdrant_collections)
         profile = build_retrieval_profiles(profile_collections)["simple_vector"]
-        self.vector_name = vector_name
-        self.profile = replace(profile, top_k=top_k, vector_name=vector_name)
+        dense_vector_name = vector_name or "dense"
+        self.vector_name = dense_vector_name
+        self.profile = replace(profile, top_k=top_k, vector_name=dense_vector_name)
         self.strategy = SimpleVectorStrategy(
             self.profile,
             QdrantRetrievalAdapter(cfg.qdrant_url, cfg.qdrant_api_key),

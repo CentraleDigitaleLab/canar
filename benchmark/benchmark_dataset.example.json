@@ -1,334 +1,331 @@
 [
-  {
-    "id": "q_exact_001",
-    "question": "What does melt() do in data.table?",
-    "question_category": "Exact Lookup",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd#6",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#7"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_exact_002",
-    "question": "What does pivot_longer() do?",
-    "question_category": "Exact Lookup",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_tidyverse.qmd#12"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_tidyverse.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_exact_003",
-    "question": "What is the purpose of fread()?",
-    "question_category": "Exact Lookup",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#2",
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#3",
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#4"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_exact_004",
-    "question": "What is the := operator used for in data.table?",
-    "question_category": "Exact Lookup",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd#9",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#10",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#11"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_tech_001",
-    "question": "How do I join tables with data.table?",
-    "question_category": "Technical Documentation",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd#3",
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd#4",
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd#5"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_tech_002",
-    "question": "What should I check before and after performing a join?",
-    "question_category": "Technical Documentation",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd#6",
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd#7",
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd#8"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_joindre_donnees.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_tech_003",
-    "question": "How do I import flat files in R?",
-    "question_category": "Technical Documentation",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#0",
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#1",
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#2"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_tech_004",
-    "question": "How do I use DuckDB with data stored on disk?",
-    "question_category": "Technical Documentation",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#4",
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#5",
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#6"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_code_001",
-    "question": "How do I create or modify columns with := in data.table?",
-    "question_category": "Code-Oriented Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd#9",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#10",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#11"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_code_002",
-    "question": "How do I perform grouped operations in data.table?",
-    "question_category": "Code-Oriented Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd#4",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#5"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_code_003",
-    "question": "How can I define functions that modify a data.table?",
-    "question_category": "Code-Oriented Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd#11",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#12",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#13"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_code_004",
-    "question": "How can I build regular expressions with rex?",
-    "question_category": "Code-Oriented Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_donnees_textuelles.qmd#6",
-      "03_Fiches_thematiques/Fiche_donnees_textuelles.qmd#7",
-      "03_Fiches_thematiques/Fiche_donnees_textuelles.qmd#8",
-      "03_Fiches_thematiques/Fiche_donnees_textuelles.qmd#9"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_donnees_textuelles.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_concept_001",
-    "question": "What is DuckDB?",
-    "question_category": "Broad Conceptual Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#0",
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#1"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_concept_002",
-    "question": "What are the advantages of DuckDB?",
-    "question_category": "Broad Conceptual Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#2",
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#3"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_concept_003",
-    "question": "What is Arrow?",
-    "question_category": "Broad Conceptual Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_arrow.qmd#0",
-      "03_Fiches_thematiques/Fiche_arrow.qmd#1",
-      "03_Fiches_thematiques/Fiche_arrow.qmd#2"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_arrow.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_concept_004",
-    "question": "What tasks can be automated with targets?",
-    "question_category": "Broad Conceptual Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_targets.qmd#0",
-      "03_Fiches_thematiques/Fiche_targets.qmd#1"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_targets.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_multihop_001",
-    "question": "What are the differences between DuckDB and Arrow?",
-    "question_category": "Multi-Hop Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#17",
-      "03_Fiches_thematiques/Fiche_duckdb.qmd#18",
-      "03_Fiches_thematiques/Fiche_arrow.qmd#0",
-      "03_Fiches_thematiques/Fiche_arrow.qmd#1"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_duckdb.qmd",
-      "03_Fiches_thematiques/Fiche_arrow.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "hard",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_multihop_002",
-    "question": "How can I transform columns into rows using either data.table or tidyverse?",
-    "question_category": "Multi-Hop Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd#6",
-      "03_Fiches_thematiques/Fiche_datatable.qmd#7",
-      "03_Fiches_thematiques/Fiche_tidyverse.qmd#12"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_datatable.qmd",
-      "03_Fiches_thematiques/Fiche_tidyverse.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "hard",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_multihop_003",
-    "question": "How can I build a reproducible R workflow and manage its dependencies?",
-    "question_category": "Multi-Hop Questions",
-    "expected_chunks": [
-      "03_Fiches_thematiques/Fiche_targets.qmd#0",
-      "03_Fiches_thematiques/Fiche_targets.qmd#1",
-      "03_Fiches_thematiques/Fiche_gerer_dependances.qmd#1"
-    ],
-    "expected_documents": [
-      "03_Fiches_thematiques/Fiche_targets.qmd",
-      "03_Fiches_thematiques/Fiche_gerer_dependances.qmd"
-    ],
-    "answer_present": true,
-    "difficulty": "hard",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_noanswer_001",
-    "question": "What does variable PS010 mean?",
-    "question_category": "No-Answer Questions",
-    "expected_chunks": [],
-    "expected_documents": [],
-    "answer_present": false,
-    "difficulty": "easy",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_noanswer_002",
-    "question": "What is the official 2026 value of the PS010 variable?",
-    "question_category": "No-Answer Questions",
-    "expected_chunks": [],
-    "expected_documents": [],
-    "answer_present": false,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  },
-  {
-    "id": "q_noanswer_003",
-    "question": "How do I use pandas merge in Python according to this documentation?",
-    "question_category": "No-Answer Questions",
-    "expected_chunks": [],
-    "expected_documents": [],
-    "answer_present": false,
-    "difficulty": "medium",
-    "collection": "utilitr_v1"
-  }
+{
+"id": "q_exact_001",
+"question": "What vectorized function is recommended for importing SAS tables directly into R?",
+"question_category": "Exact Lookup",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_import_tables_sas.qmd#0"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_import_tables_sas.qmd"
+],
+"answer_present": true,
+"difficulty": "easy",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_exact_002",
+"question": "Quelle fonction permet de calculer des statistiques après un group_by() dans dplyr ?",
+"question_category": "Exact Lookup",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_tidyverse.qmd#6"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_tidyverse.qmd"
+],
+"answer_present": true,
+"difficulty": "easy",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_exact_003",
+"question": "Which function is described as the fastest for importing flat files in the benchmark?",
+"question_category": "Exact Lookup",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd#4"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_import_fichiers_plats.qmd"
+],
+"answer_present": true,
+"difficulty": "easy",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_exact_004",
+"question": "Que permet de faire un fichier .Rprofile dans la configuration de R ?",
+"question_category": "Exact Lookup",
+"expected_chunks": [
+"01_R_Insee/Fiche-personnaliser-R.qmd#4"
+],
+"expected_documents": [
+"01_R_Insee/Fiche-personnaliser-R.qmd"
+],
+"answer_present": true,
+"difficulty": "easy",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_tech_001",
+"question": "How should I connect to a database without hard-coding my username and password in an R script?",
+"question_category": "Technical Documentation",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_connexion_bdd.qmd#4"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_connexion_bdd.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_tech_002",
+"question": "Comment importer un fichier Excel avec l'interface graphique de RStudio et récupérer le code généré ?",
+"question_category": "Technical Documentation",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_import_tableurs.qmd#1"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_import_tableurs.qmd"
+],
+"answer_present": true,
+"difficulty": "easy",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_tech_003",
+"question": "How can I build automated R Markdown reports that vary by department or another parameter?",
+"question_category": "Technical Documentation",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_rmarkdown_param_report.qmd#0",
+"03_Fiches_thematiques/Fiche_rmarkdown_param_report.qmd#3"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_rmarkdown_param_report.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_tech_004",
+"question": "How do I store and use an API token in R without putting the token directly in my script?",
+"question_category": "Technical Documentation",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_api.qmd#6"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_api.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_code_001",
+"question": "How do I perform a left join with data.table's merge() function?",
+"question_category": "Code-Oriented Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_datatable.qmd#6"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_datatable.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_code_002",
+"question": "Quelle syntaxe permet de transformer des colonnes en lignes avec pivot_longer ?",
+"question_category": "Code-Oriented Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_tidyverse.qmd#12"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_tidyverse.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_code_003",
+"question": "Which POSIX conversion functions are used to represent date-times in R, and what is the role of the tz argument?",
+"question_category": "Code-Oriented Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_donnees_temporelles.qmd#1"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_donnees_temporelles.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_code_004",
+"question": "How does collect() behave when using dplyr syntax with duckdb lazy evaluation?",
+"question_category": "Code-Oriented Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_duckdb.qmd#11"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_duckdb.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_concept_001",
+"question": "Why is choosing an R package considered an important and delicate decision?",
+"question_category": "Broad Conceptual Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_comment_choisir_un_package.qmd#0"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_comment_choisir_un_package.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_concept_002",
+"question": "Pourquoi l'utilisation de données d'enquête nécessite-t-elle une attention particulière aux pondérations ?",
+"question_category": "Broad Conceptual Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_survey.qmd#0"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_survey.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_concept_003",
+"question": "What is lazy evaluation in duckdb and why does it matter for processing data?",
+"question_category": "Broad Conceptual Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_duckdb.qmd#11"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_duckdb.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_concept_004",
+"question": "Pourquoi le format Parquet est-il recommandé pour stocker des données volumineuses ?",
+"question_category": "Broad Conceptual Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_import_fichiers_parquet.qmd#0"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_import_fichiers_parquet.qmd"
+],
+"answer_present": true,
+"difficulty": "easy",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_multihop_001",
+"question": "For very large Parquet data, when should I prefer arrow and when should I prefer duckdb?",
+"question_category": "Multi-Hop Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_arrow.qmd#2",
+"03_Fiches_thematiques/Fiche_duckdb.qmd#4",
+"03_Fiches_thematiques/Fiche_import_fichiers_parquet.qmd#0"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_arrow.qmd",
+"03_Fiches_thematiques/Fiche_duckdb.qmd",
+"03_Fiches_thematiques/Fiche_import_fichiers_parquet.qmd"
+],
+"answer_present": true,
+"difficulty": "hard",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_multihop_002",
+"question": "What should I do before using Git with RStudio if I also need to connect to a remote GitLab or GitHub repository?",
+"question_category": "Multi-Hop Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_git_utilisation.qmd#0",
+"03_Fiches_thematiques/Fiche_configurer_git.qmd#0"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_git_utilisation.qmd",
+"03_Fiches_thematiques/Fiche_configurer_git.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_multihop_003",
+"question": "Comment produire de nombreux rapports automatisés à partir d'un même modèle R Markdown en changeant seulement des paramètres ?",
+"question_category": "Multi-Hop Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_rmarkdown_param_report.qmd#0",
+"03_Fiches_thematiques/Fiche_rmarkdown_param_report.qmd#3"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_rmarkdown_param_report.qmd"
+],
+"answer_present": true,
+"difficulty": "medium",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_multihop_004",
+"question": "How can targets help automate a reproducible R pipeline, and how can dynamic branches avoid creating many separate targets?",
+"question_category": "Multi-Hop Questions",
+"expected_chunks": [
+"03_Fiches_thematiques/Fiche_targets.qmd#0",
+"03_Fiches_thematiques/Fiche_targets.qmd#6"
+],
+"expected_documents": [
+"03_Fiches_thematiques/Fiche_targets.qmd"
+],
+"answer_present": true,
+"difficulty": "hard",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_noanswer_001",
+"question": "How do I deploy a Shiny app to shinyapps.io using rsconnect with GitHub Actions?",
+"question_category": "No-Answer Questions",
+"expected_chunks": [],
+"expected_documents": [],
+"answer_present": false,
+"difficulty": "hard",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_noanswer_002",
+"question": "What are the exact hyperparameters used to train a BERT model for text classification in this documentation?",
+"question_category": "No-Answer Questions",
+"expected_chunks": [],
+"expected_documents": [],
+"answer_present": false,
+"difficulty": "hard",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_noanswer_003",
+"question": "Comment configurer Kubernetes pour exposer une API Plumber avec un Ingress NGINX ?",
+"question_category": "No-Answer Questions",
+"expected_chunks": [],
+"expected_documents": [],
+"answer_present": false,
+"difficulty": "hard",
+"collection": "utilitr_v2"
+},
+{
+"id": "q_noanswer_004",
+"question": "Which GPU settings are recommended for accelerating xgboost training with CUDA in this corpus?",
+"question_category": "No-Answer Questions",
+"expected_chunks": [],
+"expected_documents": [],
+"answer_present": false,
+"difficulty": "hard",
+"collection": "utilitr_v2"
+}
 ]

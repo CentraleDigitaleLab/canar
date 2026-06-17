@@ -1,0 +1,14 @@
+{
+  "collections": [
+    "utilitr_v1"
+  ],
+  "dataset": "benchmark/benchmark_dataset.example.json",
+  "output": "benchmark/runs",
+  "results_output": "benchmark/results",
+  "run_id": "utilitr_simple_sparse_example",
+  "sparse_vector_name": "sparse",
+  "strategies": [
+    "simple_sparse"
+  ],
+  "top_k": 10
+}
