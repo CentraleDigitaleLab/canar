@@ -1,0 +1,14 @@
+{
+  "collections": [
+    "utilitr_v1"
+  ],
+  "dataset": "benchmark/benchmark_dataset.example.json",
+  "output": "benchmark/runs",
+  "results_output": "benchmark/results",
+  "run_id": "utilitr_simple_vector_dense_example",
+  "strategies": [
+    "simple_vector"
+  ],
+  "top_k": 10,
+  "vector_name": "dense"
+}

@@ -1,0 +1,5 @@
+Category,Retrieval Strategy,Hit@10,Recall@10,MRR,Latency(ms),Precision@10,nDCG,Token Cost,Qualitative Notes
+Broad Conceptual Questions,simple_vector,0.5,0.5,0.166667,50.029346,0.05,0.25,1599.5,
+Code-Oriented Questions,simple_vector,0.5,0.5,0.1,61.740486,0.05,0.193426,3441.0,
+No-Answer Questions,simple_vector,,,,46.366458,,,3718.0,
+Technical Documentation,simple_vector,0.4,0.4,0.4,302.214926,0.04,0.4,3131.8,

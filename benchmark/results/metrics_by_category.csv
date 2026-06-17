@@ -1,0 +1,5 @@
+Category,Questions,Hit@10,Recall@10,Precision@10,MRR,nDCG@10,Latency Avg(ms),Latency Median(ms),Latency p95(ms),Token Cost
+Broad Conceptual Questions,2,0.5,0.5,0.05,0.166667,0.25,50.029346,50.029346,50.789487,1599.5
+Code-Oriented Questions,2,0.5,0.5,0.05,0.1,0.193426,61.740486,61.740486,69.34848,3441.0
+No-Answer Questions,1,,,,,,46.366458,46.366458,46.366458,3718.0
+Technical Documentation,5,0.4,0.4,0.04,0.4,0.4,302.214926,66.46849,1041.103064,3131.8
