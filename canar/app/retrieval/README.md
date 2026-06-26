@@ -66,6 +66,21 @@ RetrievalProfile(
 The previous flat hybrid fields, such as `dense_top_k`, `sparse_top_k`, `rrf_k`,
 `dense_weight`, and `sparse_weight`, are still resolved for compatibility.
 
+Parent-child profiles use the same dense/sparse/fusion blocks for child retrieval and a
+small parent-child block for parent lookup behavior:
+
+```python
+RetrievalProfile(
+    name="parent_child_vector",
+    strategy="parent_child_vector",
+    collections=collections,
+    dense=DenseRetrievalParams(top_k=5, min_score=0.35),
+    parent_child=ParentChildRetrievalParams(parent_collection_suffix="_parent"),
+)
+```
+
+The legacy flat `parent_collection_suffix` field is still resolved for compatibility.
+
 Agent-to-profile mapping is defined in `AGENT_RETRIEVAL_PROFILES`.
 
 ## Layers

@@ -140,6 +140,27 @@ RetrievalProfile(
 )
 ```
 
+Parent-child implemented profile:
+
+```python
+RetrievalProfile(
+    name="parent_child_vector",
+    strategy="parent_child_vector",
+    collections=cfg.qdrant_collections,
+    top_k=5,
+    score_threshold=0.35,
+    source_filter="utilitr",
+    fallback_top_k=3,
+    vector_name=cfg.qdrant_dense_vector_name or None,
+    dense=DenseRetrievalParams(top_k=5, min_score=0.35, max_kept=None),
+    parent_child=ParentChildRetrievalParams(parent_collection_suffix="_parent"),
+)
+```
+
+Parent-child hybrid uses the same `dense`, `sparse`, and `fusion` blocks as `hybrid`
+for child retrieval, plus `parent_child` for parent collection lookup. The legacy flat
+`parent_collection_suffix` field is still resolved for compatibility.
+
 Sparse and hybrid retrieval assume compatible sparse vectors already exist in Qdrant. The sparse vector model and named-vector configuration must match the ingestion pipeline.
 
 ## Retrieval strategy
@@ -221,6 +242,11 @@ class FusionRetrievalParams:
 
 
 @dataclass(frozen=True)
+class ParentChildRetrievalParams:
+    parent_collection_suffix: str = "_parent"
+
+
+@dataclass(frozen=True)
 class RetrievalProfile:
     name: str
     strategy: str
@@ -239,6 +265,8 @@ class RetrievalProfile:
     rrf_k: int = 60
     dense_weight: float = 1.0
     sparse_weight: float = 1.0
+    parent_child: ParentChildRetrievalParams | None = None
+    parent_collection_suffix: str = "_parent"
 
 
 @dataclass(frozen=True)

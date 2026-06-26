@@ -39,6 +39,11 @@ class FusionRetrievalParams:
 
 
 @dataclass(frozen=True)
+class ParentChildRetrievalParams:
+    parent_collection_suffix: str = "_parent"
+
+
+@dataclass(frozen=True)
 class RetrievalProfile:
     name: str
     strategy: str
@@ -57,6 +62,8 @@ class RetrievalProfile:
     rrf_k: int = 60
     dense_weight: float = 1.0
     sparse_weight: float = 1.0
+    parent_child: ParentChildRetrievalParams | None = None
+    parent_collection_suffix: str = "_parent"
 
     def dense_params(self) -> DenseRetrievalParams:
         if self.dense is not None:
@@ -84,6 +91,13 @@ class RetrievalProfile:
                 "sparse": self.sparse_weight,
             },
             final_top_k=self.final_top_k or self.top_k,
+        )
+
+    def parent_child_params(self) -> ParentChildRetrievalParams:
+        if self.parent_child is not None:
+            return self.parent_child
+        return ParentChildRetrievalParams(
+            parent_collection_suffix=self.parent_collection_suffix,
         )
 
 

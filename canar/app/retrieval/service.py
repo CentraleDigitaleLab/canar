@@ -73,18 +73,22 @@ class RetrievalService:
 
         parent_child_vector_profile = profiles["parent_child_vector"]
         parent_child_hybrid_profile = profiles["parent_child_hybrid"]
+        parent_child_hybrid_dense_params = parent_child_hybrid_profile.dense_params()
+        parent_child_hybrid_sparse_params = parent_child_hybrid_profile.sparse_params()
         parent_child_hybrid_dense_profile = replace(
             parent_child_hybrid_profile,
             name="parent_child_hybrid_dense",
             strategy="simple_vector",
-            top_k=parent_child_hybrid_profile.dense_top_k or parent_child_hybrid_profile.top_k,
+            top_k=parent_child_hybrid_dense_params.top_k,
+            dense=parent_child_hybrid_dense_params,
             vector_name=cfg.qdrant_dense_vector_name or None,
         )
         parent_child_hybrid_sparse_profile = replace(
             parent_child_hybrid_profile,
             name="parent_child_hybrid_sparse",
             strategy="simple_sparse",
-            top_k=parent_child_hybrid_profile.sparse_top_k or parent_child_hybrid_profile.top_k,
+            top_k=parent_child_hybrid_sparse_params.top_k,
+            sparse=parent_child_hybrid_sparse_params,
         )
         parent_child_hybrid_child = HybridStrategy(
             parent_child_hybrid_profile,
