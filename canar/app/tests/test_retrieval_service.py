@@ -1,6 +1,13 @@
 from __future__ import annotations
 
-from canar.app.retrieval.models import RetrievalHit, RetrievalProfile, RetrievalQuery, SparseVector
+from canar.app.retrieval.models import (
+    DenseRetrievalParams,
+    RetrievalHit,
+    RetrievalProfile,
+    RetrievalQuery,
+    SparseRetrievalParams,
+    SparseVector,
+)
 from canar.app.retrieval.service import RetrievalService
 
 
@@ -183,3 +190,14 @@ def test_retrieval_service_builds_hybrid_with_dense_and_sparse_vector_names(
     assert hybrid.sparse_strategy.profile.vector_name == "text-sparse"
     assert hybrid.dense_strategy.profile.top_k == 10
     assert hybrid.sparse_strategy.profile.top_k == 10
+    assert hybrid.dense_strategy.profile.dense == DenseRetrievalParams(
+        top_k=10,
+        min_score=0.35,
+        max_kept=None,
+    )
+    assert hybrid.sparse_strategy.profile.sparse == SparseRetrievalParams(
+        top_k=10,
+        min_score_ratio=0.35,
+        gap_ratio=None,
+        max_kept=None,
+    )
