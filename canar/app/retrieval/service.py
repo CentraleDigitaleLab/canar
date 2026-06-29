@@ -45,18 +45,22 @@ class RetrievalService:
 
         qdrant = QdrantRetrievalAdapter(cfg.qdrant_url, cfg.qdrant_api_key)
         hybrid_profile = profiles["hybrid"]
+        hybrid_dense_params = hybrid_profile.dense_params()
+        hybrid_sparse_params = hybrid_profile.sparse_params()
         hybrid_dense_profile = replace(
             hybrid_profile,
             name="hybrid_dense",
             strategy="simple_vector",
-            top_k=hybrid_profile.dense_top_k or hybrid_profile.top_k,
+            top_k=hybrid_dense_params.top_k,
+            dense=hybrid_dense_params,
             vector_name=cfg.qdrant_dense_vector_name or None,
         )
         hybrid_sparse_profile = replace(
             hybrid_profile,
             name="hybrid_sparse",
             strategy="simple_sparse",
-            top_k=hybrid_profile.sparse_top_k or hybrid_profile.top_k,
+            top_k=hybrid_sparse_params.top_k,
+            sparse=hybrid_sparse_params,
         )
         strategies: dict[str, RetrievalStrategy] = {
             "simple_vector": SimpleVectorStrategy(profiles["simple_vector"], qdrant),
