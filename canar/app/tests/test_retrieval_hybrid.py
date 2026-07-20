@@ -41,7 +41,12 @@ class RecordingFusion:
         return [hit for ranked_list in ranked_lists for hit in ranked_list][:top_k]
 
 
-def hit(text: str, score: float = 1.0, metadata: dict | None = None) -> RetrievalHit:
+def hit(
+    text: str,
+    score: float = 1.0,
+    metadata: dict | None = None,
+    response_confidence: float | None = None,
+) -> RetrievalHit:
     return RetrievalHit(
         text=text,
         collection="docs",
@@ -49,6 +54,7 @@ def hit(text: str, score: float = 1.0, metadata: dict | None = None) -> Retrieva
         score_norm=score,
         source="utilitr",
         metadata=metadata or {},
+        response_confidence=response_confidence,
     )
 
 
@@ -144,6 +150,7 @@ def test_structured_hybrid_profile_fields_resolve_to_strategy_params():
     )
     assert profile.rerank_params() == RerankRetrievalParams(output_top_k=5)
 
+
 def test_simple_vector_profile_uses_dense_vector_name():
     profiles = build_retrieval_profiles(
         ("docs",),
@@ -156,7 +163,11 @@ def test_simple_vector_profile_uses_dense_vector_name():
 
 
 def test_rrf_combines_ranked_lists_and_merges_duplicate_hits():
-    duplicate_dense = hit("shared document", metadata={"chunk_id": "shared"})
+    duplicate_dense = hit(
+        "shared document",
+        metadata={"chunk_id": "shared"},
+        response_confidence=0.92,
+    )
     duplicate_sparse = hit("shared document", metadata={"chunk_id": "shared"})
 
     fused = ReciprocalRankFusion().fuse(
@@ -170,6 +181,8 @@ def test_rrf_combines_ranked_lists_and_merges_duplicate_hits():
     assert [result.text for result in fused] == ["shared document", "dense only", "sparse only"]
     assert len(fused) == 3
     assert fused[0].score_norm == 1.0
+
+    assert fused[0].response_confidence == 0.92
 
 
 def test_rrf_equal_weights_match_default_behavior():

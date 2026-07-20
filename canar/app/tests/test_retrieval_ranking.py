@@ -45,7 +45,13 @@ class FakeQwenReranker(QwenReranker):
 def test_bge_reranker_orders_hits_and_adds_rerank_score_without_model_load():
     hits = [
         RetrievalHit(text="first", collection="docs", score=1.0, score_norm=1.0),
-        RetrievalHit(text="second", collection="docs", score=0.8, score_norm=0.8),
+        RetrievalHit(
+            text="second",
+            collection="docs",
+            score=0.8,
+            score_norm=0.8,
+            response_confidence=0.88,
+        ),
         RetrievalHit(text="third", collection="docs", score=0.6, score_norm=0.6),
     ]
     reranker = FakeBGEReranker([0.1, 0.9, 0.4])
@@ -55,6 +61,7 @@ def test_bge_reranker_orders_hits_and_adds_rerank_score_without_model_load():
     assert [hit.text for hit in reranked] == ["second", "third"]
     assert [hit.rerank_score for hit in reranked] == [0.9, 0.4]
     assert all(hit.rerank_score is None for hit in hits)
+    assert [hit.response_confidence for hit in reranked] == [0.88, None]
     assert reranker.pairs == [
         ("query", "Document: first"),
         ("query", "Document: second"),
@@ -101,9 +108,7 @@ def test_reranker_rejects_blank_query_negative_top_k_and_missing_text():
         ("qwen-8b", QwenReranker, "Qwen/Qwen3-Reranker-8B"),
     ],
 )
-def test_build_reranker_supports_only_registered_models(
-    name, expected_type, expected_model
-):
+def test_build_reranker_supports_only_registered_models(name, expected_type, expected_model):
     reranker = build_reranker(name, device="cuda", max_length=256)
 
     assert isinstance(reranker, expected_type)

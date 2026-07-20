@@ -32,6 +32,7 @@ def test_parent_child_expander_fetches_parents_and_populates_generation_text():
             collection="children_a",
             score=0.2,
             score_norm=0,
+            response_confidence=0.91,
             metadata={"parent_id": "parent-1"},
         ),
         RetrievalHit(
@@ -63,6 +64,7 @@ def test_parent_child_expander_fetches_parents_and_populates_generation_text():
         "parent two text",
         "unmapped child",
     ]
+    assert expanded[0].response_confidence == 0.91
 
 
 def test_parent_child_expander_uses_structured_parent_collection_suffix():

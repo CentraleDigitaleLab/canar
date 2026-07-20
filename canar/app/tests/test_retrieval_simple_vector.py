@@ -59,6 +59,36 @@ def test_simple_vector_normalizes_sorts_and_prunes_hits():
         ("docs_a", [0.1, 0.2], 5, "utilitr", None),
         ("docs_b", [0.1, 0.2], 5, "utilitr", None),
     ]
+    assert hits[0].response_confidence == 0.6
+
+
+def test_simple_vector_preserves_raw_cosine_when_normalized_score_is_zero():
+    profile = RetrievalProfile(
+        name="simple_vector",
+        strategy="simple_vector",
+        collections=("docs",),
+        dense=DenseRetrievalParams(fetch_top_k=5, min_score=0.35),
+        fallback_top_k=3,
+    )
+    adapter = FakeDenseAdapter(
+        {
+            "docs": [
+                RetrievalHit(
+                    text="single high-confidence result",
+                    collection="docs",
+                    score=0.95,
+                    score_norm=0.0,
+                )
+            ]
+        }
+    )
+
+    hits = SimpleVectorStrategy(profile, adapter).search(
+        RetrievalQuery(text="question", profile_name="simple_vector", dense_vector=[0.1])
+    )
+
+    assert hits[0].score_norm == 0.0
+    assert hits[0].response_confidence == 0.95
 
 
 def test_simple_vector_uses_dense_params_for_top_k_threshold_and_max_kept():
