@@ -1,7 +1,9 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from dotenv import load_dotenv
+
+from canar.app.response_strategy import ResponseStrategyConfig
 
 load_dotenv(override=True)
 
@@ -28,6 +30,11 @@ class AppConfig:
     )
 
     db_path: str = os.getenv("APP_DB", "data/app.db")
+    response_strategy: ResponseStrategyConfig = field(
+        default_factory=ResponseStrategyConfig.from_env
+    )
 
-    def validate(self):
-        assert len(self.qdrant_collections) >= 1, "QDRANT_COLLECTIONS cannot be empty"
+    def validate(self) -> None:
+        if not self.qdrant_collections:
+            raise ValueError("QDRANT_COLLECTIONS cannot be empty")
+        self.response_strategy.validate()

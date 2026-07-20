@@ -6,6 +6,7 @@ from canar.app.agents import r_helpdesk, sas_to_r
 from canar.app.api.embed_client import EmbedClient
 from canar.app.api.llm_client import ChatClient
 from canar.app.config import AppConfig
+from canar.app.response_strategy import select_response_mode, stream_response
 from canar.app.retrieval.service import RetrievalService
 from canar.app.state import DB
 from canar.app.ui.chat import render_messages, stream_answer
@@ -224,18 +225,31 @@ if user_input:
 
     else:  # r_helpdesk
         citations = retrieval.search(st.session_state["agent"], user_input)
-        messages, src_list = r_helpdesk.build_messages(user_input, citations)
-        gen = chat.stream_chat(messages, temperature=temperature, max_tokens=max_tokens)
-        answer = stream_answer(db, USER_ID, conv_id, gen)
+        response_decision = select_response_mode(citations, cfg.response_strategy)
+        response_mode = response_decision.mode if response_decision.strategy_enabled else None
+        messages, src_list = r_helpdesk.build_messages(
+            user_input,
+            citations,
+            response_mode=response_mode,
+        )
+        gen = stream_response(
+            chat,
+            messages,
+            response_decision,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+        _ = stream_answer(db, USER_ID, conv_id, gen)
 
         # Citations panel
-        with st.expander("Sources"):
-            for src in src_list:
-                st.markdown(f"""
-                - **[{src["label"]}]** {src["section"]}  \n  
-                {src["url"]}  \n  
-                _({src["collection"]})_
-                """)
+        if src_list:
+            with st.expander("Sources"):
+                for src in src_list:
+                    st.markdown(
+                        f"- **[{src['label']}]** {src['section']}\n\n"
+                        f"{src['url']}\n\n"
+                        f"_({src['collection']})_"
+                    )
 
 # Footer / export for SAS→R
 if st.session_state["agent"] == "sas_to_r":

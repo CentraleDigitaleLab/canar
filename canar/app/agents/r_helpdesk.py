@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from canar.app.response_strategy import ResponseMode
 from canar.app.retrieval.models import RetrievalHit
 
 SYSTEM_PROMPT_FR = """
@@ -50,12 +51,49 @@ def assemble_context(citations: list[RetrievalHit]) -> tuple[str, list[dict]]:
     return context, srcs
 
 
-def build_messages(query: str, citations: list[RetrievalHit]) -> tuple[list[dict], list[dict]]:
-    context_text, src_list = assemble_context(citations)
-    user_msg = (
-        f"Question: {query}\n\nContexte (extraits documentaires):\n{context_text}\n\n"
-        f"Consigne: Utilise uniquement les extraits pertinents. Cite [S1], [S2] si utilisés."
-    )
+def build_messages(
+    query: str,
+    citations: list[RetrievalHit],
+    response_mode: ResponseMode | None = None,
+) -> tuple[list[dict], list[dict]]:
+    if response_mode is ResponseMode.GENERAL_KNOWLEDGE_ONLY:
+        context_text, src_list = "", []
+    else:
+        context_text, src_list = assemble_context(citations)
+
+    if response_mode is None:
+        user_msg = (
+            f"Question: {query}\n\nContexte (extraits documentaires):\n{context_text}\n\n"
+            "Consigne: Utilise uniquement les extraits pertinents. "
+            "Cite [S1], [S2] si utilisés."
+        )
+    elif response_mode is ResponseMode.RAG_ONLY:
+        user_msg = (
+            f"Question: {query}\n\nContexte (extraits documentaires):\n{context_text}\n\n"
+            "Consigne: Réponds entièrement et uniquement à partir des extraits pertinents. "
+            "N'ajoute aucune information issue de tes connaissances générales. "
+            "Cite [S1], [S2] pour chaque information utilisée."
+        )
+    elif response_mode is ResponseMode.RAG_WITH_GENERAL_KNOWLEDGE:
+        user_msg = (
+            f"Question: {query}\n\nContexte (extraits documentaires):\n{context_text}\n\n"
+            "Consigne: Réponds dans la langue de la question en séparant clairement la réponse "
+            "en deux sections avec des titres dans cette même langue. La première section, "
+            "« Informations issues de la base documentaire », doit utiliser les extraits et "
+            "citer [S1], [S2] pour chaque information. La seconde section, « Complément fondé "
+            "sur les connaissances générales du modèle », peut compléter les lacunes avec tes "
+            "connaissances générales et ne doit contenir aucune citation documentaire. "
+            "En cas de contradiction, les extraits documentaires prévalent et la divergence "
+            "doit être signalée explicitement."
+        )
+    else:
+        user_msg = (
+            f"Question: {query}\n\n"
+            "Consigne: Réponds dans la langue de la question uniquement à partir de tes "
+            "connaissances générales. N'utilise aucun document récupéré, n'invente aucune "
+            "source et n'ajoute aucune citation [S1], [S2]. L'avertissement sur l'absence "
+            "de fondement documentaire est ajouté séparément par l'application : ne le répète pas."
+        )
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT_FR},
         {"role": "user", "content": user_msg},

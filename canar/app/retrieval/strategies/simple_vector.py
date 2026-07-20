@@ -37,7 +37,14 @@ class SimpleVectorStrategy:
         scores = [hit.score for hit in hits]
         lo, hi = min(scores), max(scores)
         score_range = (hi - lo) or 1.0
-        return [replace(hit, score_norm=(hit.score - lo) / score_range) for hit in hits]
+        return [
+            replace(
+                hit,
+                score_norm=(hit.score - lo) / score_range,
+                response_confidence=hit.score,
+            )
+            for hit in hits
+        ]
 
     def _prune_hits(self, hits: list[RetrievalHit]) -> list[RetrievalHit]:
         params = self.profile.dense_params()

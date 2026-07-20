@@ -130,3 +130,4 @@ class RetrievalHit:
     section: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
     rerank_score: float | None = None
+    response_confidence: float | None = None
