@@ -17,6 +17,7 @@ canar/
     main.py                  Streamlit entrypoint and chat flow
     state.py                 SQLModel DB for users, conversations, messages
     config.py                Runtime config from environment variables
+    response_strategy.py     Response-mode classification and fallback streaming
     api/
       embed_client.py        OpenAI-compatible embedding client
       llm_client.py          OpenAI-compatible chat client
@@ -46,8 +47,9 @@ canar/
 3. Agent routing happens based on `st.session_state["agent"]`.
 4. For `sas_to_r`, `sas_to_r.build_messages` assembles the prompt, then `ChatClient.stream_chat` streams the answer.
 5. For `r_helpdesk`, `RetrievalService.search(agent, query)` selects the agent retrieval profile, embeds the query, executes the configured retrieval strategy, and returns `list[RetrievalHit]`.
-6. `r_helpdesk.build_messages` assembles context from `RetrievalHit` objects and returns both LLM messages and source metadata for the UI.
-7. The response stream is rendered token-by-token and saved to the DB.
+6. `select_response_mode` classifies the first final result using its preserved raw dense cosine (`response_confidence`) after the complete retrieval pipeline. It never uses `score_norm`, RRF, sparse, or raw reranker scores. Empty or invalid confidence selects general knowledge only.
+7. `r_helpdesk.build_messages` receives the selected mode explicitly, includes context and source metadata only when that mode uses retrieved documents, and separates documentary and general-knowledge content in mixed mode.
+8. `stream_response` adds any deterministic fallback warning, then the response is rendered token-by-token and saved to the DB.
 
 ## Conversation state management
 
@@ -295,6 +297,7 @@ class RetrievalHit:
     score: float
     score_norm: float
     source: str | None = None
+    response_confidence: float | None = None
     source_url: str | None = None
     section: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -312,6 +315,8 @@ Logical template for `r_helpdesk`:
 ```
 
 `r_helpdesk.assemble_context` accepts `list[RetrievalHit]`, enumerates citations as `[S1]`, `[S2]`, etc., and returns `src_list` for the UI sources panel. Conversation history is not injected into the prompt in the current code path.
+
+When adaptive response selection is enabled, `RAG_ONLY` uses only this context, `RAG_WITH_GENERAL_KNOWLEDGE` requests two explicitly labelled sections, and `GENERAL_KNOWLEDGE_ONLY` excludes the context and citations. Preserved dense cosine scores above `0.85` use RAG only, scores from `0.60` through `0.85` use mixed mode, and lower or unavailable scores use general knowledge only. Pure sparse results and hybrid candidates found only by the sparse branch have no dense confidence and therefore use general knowledge only.
 
 Logical template for `sas_to_r`:
 
@@ -353,6 +358,9 @@ No retrieval context or history is added for this agent.
 | LLM_API_BASE | Base URL for OpenAI-compatible LLM API |
 | LLM_API_KEY | LLM API key |
 | LLM_MODEL | LLM model name |
+| RESPONSE_STRATEGY_ENABLED | Enable adaptive response selection (default `true`) |
+| RESPONSE_GENERAL_KNOWLEDGE_THRESHOLD | Minimum preserved dense cosine for mixed mode (default `0.60`) |
+| RESPONSE_RAG_ONLY_THRESHOLD | Dense cosine strictly above this value uses RAG only (default `0.85`) |
 | EMBED_API_BASE | Base URL for embeddings API |
 | EMBED_API_KEY | Embeddings API key |
 | EMBED_MODEL | Embeddings model name |
