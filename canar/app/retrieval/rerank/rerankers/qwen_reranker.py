@@ -186,7 +186,7 @@ class QwenReranker:
 
         # Convert final-token yes/no logits into a probability-like relevance score.
         with self._torch.no_grad():
-            batch_scores = self._model(**padded_inputs).logits[:, -1, :]
+            batch_scores = self._model(**padded_inputs, logits_to_keep=1).logits[:, -1, :]
             true_scores = batch_scores[:, self._token_true_id]
             false_scores = batch_scores[:, self._token_false_id]
             yes_no_scores = self._torch.stack([false_scores, true_scores], dim=1)
