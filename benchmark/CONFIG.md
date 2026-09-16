@@ -75,7 +75,7 @@ no flag.
 The question is the same for every strategy — only the retrieved chunks differ —
 so `input_tokens` shows how much context a strategy pushes to the LLM.
 
-Per question these land in `metrics.csv`; per profile, `comparison.csv` carries
+Per question these land in `metrics.csv`; per profile, `comparison_<collection>.csv` carries
 the avg / min / max / total for each (e.g. `input_tokens_avg`, `input_tokens_max`,
 `total_tokens_total`). Tokens are counted with the configured model's tokenizer
 when available, else `tiktoken`, else a char heuristic; which one was used is
@@ -89,7 +89,7 @@ the **resource cost** of each retrieval strategy. It's **off by default** and ad
 a tiny sampler thread per phase only when on.
 
 **Per-strategy columns** — the signals that actually differ between retrieval
-strategies, added to `metrics.csv` and `comparison.csv`:
+strategies, added to `metrics.csv` and `comparison_<collection>.csv`:
 
 | Column | What it measures | What it does NOT measure |
 |---|---|---|
@@ -130,10 +130,10 @@ measurement repeats.
 
 | Column | Where | Meaning |
 |---|---|---|
-| `faithfulness`, `answer_relevancy` | `metrics.csv`, `comparison.csv` | mean of the draws that produced a score |
+| `faithfulness`, `answer_relevancy` | `metrics.csv`, `comparison_*.csv` | mean of the draws that produced a score |
 | `faithfulness_sd`, `answer_relevancy_sd` | `metrics.csv` | spread of the draws for that question |
 | `faithfulness_draws`, `answer_relevancy_draws` | `metrics.csv` | how many draws produced a score |
-| `faithfulness_sd`, `answer_relevancy_sd` | `comparison.csv` | mean per-question spread for the profile |
+| `faithfulness_sd`, `answer_relevancy_sd` | `comparison_*.csv` | mean per-question spread for the profile |
 
 A draw that fails — unparseable judge output, a server error — costs that draw,
 not the question. The spread columns only appear when `judge_repeats` > 1, and

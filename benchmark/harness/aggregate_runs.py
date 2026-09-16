@@ -1,7 +1,7 @@
 """Combine several executions of the same configuration into one table.
 
 Each execution writes its own directory, so three runs of a configuration leave
-three independent `comparison.csv` files and no combined view. What the answer
+three independent `comparison_<collection>.csv` files and no combined view. What the answer
 quality scores need is the opposite: a central value per profile and the spread
 around it, since a difference between profiles is only meaningful when it is
 larger than the judge's own variation between runs.

@@ -570,8 +570,11 @@ def main() -> None:
     print(f"Profiles to benchmark: {[p.name for p in BENCH.profiles]} | judge: {JUDGE_MODEL}")
     print(f"Provenance: {PROVENANCE}\n")
 
-    # One folder per benchmark run; each strategy gets a subfolder inside it.
-    run_dir = HERE / "results" / f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    # One folder per benchmark run; each strategy gets a subfolder inside it. The
+    # collection is in the name, since a run only means something against the
+    # collection it queried (it used to be added by hand after each run).
+    slug = "_".join(cfg.qdrant_collections).replace("/", "-")
+    run_dir = HERE / "results" / f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{slug}"
 
     summaries = []
     for spec in BENCH.profiles:
@@ -602,7 +605,7 @@ def main() -> None:
         summaries.append((spec.name, df))
 
     # Side-by-side comparison — the point of comparing strategies. Printed and
-    # also saved as comparison.csv at the run folder's root, so the run is a
+    # also saved as comparison_<collection>.csv at the run folder's root, so the run is a
     # self-contained artifact.
     if summaries:
         # Means of the quality/latency/resource metrics, one row per profile.
@@ -639,7 +642,7 @@ def main() -> None:
             comparison = comparison.merge(token_usage, on="profile", how="left")
 
         run_dir.mkdir(parents=True, exist_ok=True)
-        comparison.to_csv(run_dir / "comparison.csv", index=False)
+        comparison.to_csv(run_dir / f"comparison_{slug}.csv", index=False)
         if len(summaries) > 1:
             print("\n=== Profile comparison ===")
             print(comparison.to_string(index=False))
