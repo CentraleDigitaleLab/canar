@@ -11,6 +11,8 @@ run:                         # how the benchmark runs
   agent: r_helpdesk
   limit: null                # null = all questions; int = quick subset
   judge_model: gemma3:12b    # RAGAS judge; null = use the product LLM
+  judge_repeats: 1           # judge each question N times (see "Judge repetition")
+  judge_temperature: 0.3     # judge sampling temperature, used when repeating
   gen_max_tokens: 8192       # generation budget (see note below)
   measure_resources: false   # true = also measure CPU/memory/GPU per phase
 
@@ -119,6 +121,41 @@ the original #53 confusion).
 Needs `psutil` (in the `benchmark` extra, which also carries `nvidia-ml-py`;
 without a GPU the run-context GPU fields are simply absent).
 
+## Judge repetition (optional)
+
+The RAGAS judge is an LLM and scores the same answer differently from one call
+to the next. `judge_repeats: N` judges every question N times per metric, after
+a single retrieval and a single generation — the answer is fixed, only the
+measurement repeats.
+
+| Column | Where | Meaning |
+|---|---|---|
+| `faithfulness`, `answer_relevancy` | `metrics.csv`, `comparison.csv` | mean of the draws that produced a score |
+| `faithfulness_sd`, `answer_relevancy_sd` | `metrics.csv` | spread of the draws for that question |
+| `faithfulness_draws`, `answer_relevancy_draws` | `metrics.csv` | how many draws produced a score |
+| `faithfulness_sd`, `answer_relevancy_sd` | `comparison.csv` | mean per-question spread for the profile |
+
+A draw that fails — unparseable judge output, a server error — costs that draw,
+not the question. The spread columns only appear when `judge_repeats` > 1, and
+`judge_repeats: 1` leaves the run as it was.
+
+`judge_temperature` matters: RAGAS otherwise forces 0.01, at which the draws
+come back near-identical and the spread says nothing about the judge. Both
+settings are stamped on every row (`judge_repeats`, `judge_temperature`); only
+compare or combine runs that share them — `aggregate_runs.py` warns when they
+don't.
+
+With repetition on, answer relevancy also generates the three questions per draw
+it was designed to (`strictness`), instead of the single one Ollama returned
+(see `REPRODUCIBILITY.md`).
+
+Cost: the judging phase is multiplied by N. Faithfulness makes two judge calls
+per draw, answer relevancy three.
+
+```bash
+JUDGE_REPEATS=5 python e2e/eval_e2e.py --config name.yaml --retrieval-k 5
+```
+
 ## Notes
 
 - `judge_model`: the local reasoning model (`qwen3.5`) is slow and times out as
@@ -129,7 +166,7 @@ without a GPU the run-context GPU fields are simply absent).
   answers, so the app's default of 2048 returns empty answers on many
   questions. Keep this high.
 - Env vars override the matching `run` keys: `JUDGE_MODEL`, `GEN_MAX_TOKENS`,
-  `MEASURE_RESOURCES`. `BENCH_TOKENIZER` selects the tokenizer for token counts.
+  `MEASURE_RESOURCES`, `JUDGE_REPEATS`, `JUDGE_TEMPERATURE`. `BENCH_TOKENIZER` selects the tokenizer for token counts.
 - `dense` (simple_vector), `sparse` (simple_sparse / BM25) and `hybrid` are all
   wired in. `sparse` and `hybrid` need `FASTEMBED_SPARSE_MODEL` set in
   `canar/.env` and a collection ingested with sparse vectors (see `SETUP.md`).

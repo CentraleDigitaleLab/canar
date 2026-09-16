@@ -44,7 +44,7 @@ from pathlib import Path
 import pandas as pd
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from qdrant_client import QdrantClient
-from ragas.metrics import Faithfulness, ResponseRelevancy
+from ragas.llms import LangchainLLMWrapper
 from ragas.run_config import RunConfig
 
 HERE = Path(__file__).parent                  # benchmark/e2e/
@@ -76,6 +76,11 @@ from bench_config import load_config  # noqa: E402
 # APOSTROPHE NORMALIZATION WORKAROUND: remove this import and unwrap
 # `judge_embeddings` below to restore direct RAGAS OpenAIEmbeddings usage.
 from embedding_normalization import NormalizingEmbeddings  # noqa: E402
+from judge_repeats import (  # noqa: E402
+    RepeatedFaithfulness,
+    RepeatedResponseRelevancy,
+    write_spread,
+)
 from preflight import collection_requirements, unclassified_profiles  # noqa: E402
 from ragas_bench import DatasetSpec, PipelineOutput, run_benchmark  # noqa: E402
 from resource_probe import gpu_context, hardware_profile, probe  # noqa: E402
@@ -126,6 +131,25 @@ MEASURE_RESOURCES = (
     else BENCH.measure_resources
 )
 
+# RAGAS judge repetition (see e2e/judge_repeats.py). Each question is judged N
+# times per metric; the score is the mean and the per-question spread is written
+# next to it. 1 = a single judgement, as before. Priority: env > YAML.
+_repeats_raw = str(os.environ.get("JUDGE_REPEATS") or BENCH.judge_repeats).strip()
+if not _repeats_raw.isdigit() or int(_repeats_raw) < 1:
+    sys.exit(f"judge_repeats must be a whole number >= 1 (got {_repeats_raw!r})")
+JUDGE_REPEATS = int(_repeats_raw)
+
+# Repeated draws only differ, and so only measure the judge's noise, when the
+# judge samples. RAGAS otherwise forces 0.01; 0.3 is what RAGAS itself uses when
+# it asks for several generations. Only applied when repeating.
+_temperature_raw = str(os.environ.get("JUDGE_TEMPERATURE") or BENCH.judge_temperature).strip()
+try:
+    JUDGE_TEMPERATURE = float(_temperature_raw)
+except ValueError:
+    JUDGE_TEMPERATURE = -1.0
+if not 0.0 <= JUDGE_TEMPERATURE <= 2.0:
+    sys.exit(f"judge_temperature must be a number between 0 and 2 (got {_temperature_raw!r})")
+
 
 def _git_commit() -> str:
     """Short commit of the canar repo, so a result can be traced to the code."""
@@ -146,6 +170,10 @@ PROVENANCE = {
     "embed_model": cfg.embed_model,
     "collection": ",".join(cfg.qdrant_collections),
     "judge_model": JUDGE_MODEL,
+    # How the answer-quality scores were measured: a mean of five sampled draws
+    # and a single near-greedy draw are not the same instrument.
+    "judge_repeats": JUDGE_REPEATS,
+    "judge_temperature": JUDGE_TEMPERATURE if JUDGE_REPEATS > 1 else "ragas_default",
     "git_commit": _git_commit(),
 }
 # When measuring resources, also stamp the machine (CPU / RAM / GPU) so the
@@ -272,6 +300,21 @@ judge_llm = ChatOpenAI(
         keep_alive="10m",
     ),
 )
+# When repeating, two RAGAS defaults would make the repeats meaningless:
+#   bypass_temperature — RAGAS overwrites the temperature with 0.01, at which
+#       repeated draws come back near-identical.
+#   bypass_n — RAGAS asks for `strictness` generations in ONE request; Ollama
+#       ignores `n` and returns one, so answer relevancy silently rests on a
+#       single question. The bypass sends separate requests, which Ollama honours.
+# Wrapping only when repeating keeps judge_repeats=1 identical to before.
+if JUDGE_REPEATS > 1:
+    judge_llm.temperature = JUDGE_TEMPERATURE
+    judge_llm = LangchainLLMWrapper(
+        judge_llm,
+        run_config=RunConfig(timeout=900, max_workers=3),
+        bypass_temperature=True,
+        bypass_n=True,
+    )
 # APOSTROPHE NORMALIZATION WORKAROUND: RAGAS-generated strings also pass through
 # bge-m3, so wrap both its sync and async embedding calls. To remove it, assign
 # the inner `OpenAIEmbeddings(...)` directly to `judge_embeddings`.
@@ -536,7 +579,10 @@ def main() -> None:
             name=f"E2E [{spec.name}] (real CanaR + AgoRa pipeline)",
             dataset=DATASET,
             pipeline=make_pipeline(build_searcher(spec)),
-            metrics=[Faithfulness(), ResponseRelevancy()],
+            metrics=[
+                RepeatedFaithfulness(repeats=JUDGE_REPEATS),
+                RepeatedResponseRelevancy(repeats=JUDGE_REPEATS),
+            ],
             judge_llm=judge_llm,
             judge_embeddings=judge_embeddings,
             results_dir=HERE / "results",
@@ -550,6 +596,9 @@ def main() -> None:
             file_label=spec.name,
             group_dir=run_dir,            # all strategies of this run share run_dir
         )
+        if JUDGE_REPEATS > 1:
+            # <metric>_sd and <metric>_draws per question, next to the mean.
+            df = write_spread(df, run_dir / spec.name / "metrics.csv")
         summaries.append((spec.name, df))
 
     # Side-by-side comparison — the point of comparing strategies. Printed and
@@ -560,7 +609,9 @@ def main() -> None:
         cols = ["hit_rate", "mrr", "recall", "precision", "ndcg",
                 "retrieval_latency_s", "generation_latency_s",
                 "retrieval_cpu_s", "peak_rss_mb",
-                "faithfulness", "answer_relevancy"]
+                "faithfulness", "answer_relevancy",
+                # only present when judge_repeats > 1: mean per-question spread
+                "faithfulness_sd", "answer_relevancy_sd"]
         rows = []
         for name, df in summaries:
             has_error = (
