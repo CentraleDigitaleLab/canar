@@ -8,7 +8,12 @@ what these tests are mostly about.
 from __future__ import annotations
 
 import pandas as pd
-from aggregate_runs import aggregate, paired_table, questions_scored_in_every_run
+from aggregate_runs import (
+    aggregate,
+    judge_settings,
+    paired_table,
+    questions_scored_in_every_run,
+)
 
 
 def _rows(records):
@@ -92,3 +97,42 @@ def test_the_paired_table_has_a_row_per_question_and_a_column_per_profile():
     assert list(table.index) == ["q1"]
     assert sorted(table.columns) == ["dense", "hybrid"]
     assert table.loc["q1", "dense"] == 0.9   # averaged over the two runs
+
+
+def test_judge_settings_reports_what_the_runs_were_measured_with():
+    frame = _rows([
+        {"run": "A", "id": "q1", "profile": "p", "judge_repeats": 5,
+         "judge_temperature": 0.3, "judge_model": "gemma3:12b"},
+        {"run": "B", "id": "q1", "profile": "p", "judge_repeats": 5,
+         "judge_temperature": 0.3, "judge_model": "gemma3:12b"},
+    ])
+    assert judge_settings(frame) == {
+        "judge_model": ["gemma3:12b"],
+        "judge_repeats": [5],
+        "judge_temperature": [0.3],
+    }
+
+
+def test_judge_settings_exposes_a_mix_of_precisions():
+    """A 5-draw mean and a single draw are the same quantity measured with
+    different precision; combining them hides that in the spread."""
+    frame = _rows([
+        {"run": "A", "id": "q1", "profile": "p", "judge_repeats": 1},
+        {"run": "B", "id": "q1", "profile": "p", "judge_repeats": 5},
+    ])
+    assert judge_settings(frame)["judge_repeats"] == [1, 5]
+
+
+def test_judge_settings_is_silent_for_runs_predating_the_columns():
+    frame = _rows([{"run": "A", "id": "q1", "profile": "p", "faithfulness": 1.0}])
+    assert judge_settings(frame) == {}
+
+
+def test_judge_settings_handles_a_run_without_repetition():
+    """A single-judgement run records the temperature as RAGAS's default, a
+    string, while a repeated one records a number."""
+    frame = _rows([
+        {"run": "A", "id": "q1", "profile": "p", "judge_temperature": "ragas_default"},
+        {"run": "B", "id": "q1", "profile": "p", "judge_temperature": 0.3},
+    ])
+    assert len(judge_settings(frame)["judge_temperature"]) == 2

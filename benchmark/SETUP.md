@@ -93,8 +93,8 @@ It runs the dataset once per strategy (`dense`, `sparse`, `hybrid`) and prints a
 comparison table. Each run is saved as one folder:
 
 ```
-e2e/results/run_<timestamp>/
-├── comparison.csv      the three strategies side by side
+e2e/results/run_<timestamp>_<collection>/
+├── comparison_<collection>.csv   the three strategies side by side
 ├── run_context.txt     the shared setup (machine, tokenizer, GPU)
 ├── dense/   (metrics.csv + answers.md)
 ├── sparse/  (metrics.csv + answers.md)

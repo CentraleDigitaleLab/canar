@@ -1,7 +1,7 @@
 """Combine several executions of the same configuration into one table.
 
 Each execution writes its own directory, so three runs of a configuration leave
-three independent `comparison.csv` files and no combined view. What the answer
+three independent `comparison_<collection>.csv` files and no combined view. What the answer
 quality scores need is the opposite: a central value per profile and the spread
 around it, since a difference between profiles is only meaningful when it is
 larger than the judge's own variation between runs.
@@ -68,6 +68,23 @@ def load_runs(run_dirs: list[Path]) -> pd.DataFrame:
             "across runs. The YAML datasets provide it; CSV datasets do not."
         )
     return combined
+
+
+def judge_settings(frame: pd.DataFrame) -> dict[str, list]:
+    """The judge settings each run was measured with, one entry per column.
+
+    A run where the judge scored every question five times and averaged carries
+    less noise per value than a single-draw run, and one sampled at 0.3 is not
+    the same instrument as one sampled at 0.01. Combining them puts values of
+    different precision into the same spread, which reads as a property of the
+    profiles rather than of how they were measured. These columns only exist on
+    runs produced after judge repetition landed; older runs simply lack them.
+    """
+    settings = {}
+    for column in ("judge_model", "judge_repeats", "judge_temperature"):
+        if column in frame.columns:
+            settings[column] = sorted(frame[column].dropna().unique().tolist(), key=str)
+    return settings
 
 
 def questions_scored_in_every_run(frame: pd.DataFrame, metric: str) -> set:
@@ -137,6 +154,23 @@ def main(argv: list[str]) -> None:
     print(f"{table['runs'].max()} run(s) combined. "
           "n is the questions scored in every run, per metric; a metric whose n is "
           "below the dataset size lost questions the judge could not score.")
+
+    settings = judge_settings(frame)
+    if settings:
+        print()
+        print("Judge: " + ", ".join(
+            f"{name.removeprefix('judge_')}="
+            + "/".join(str(v) for v in values)
+            for name, values in settings.items()
+        ))
+        mixed = [name for name, values in settings.items() if len(values) > 1]
+        if mixed:
+            print(
+                "WARNING: these runs were not judged the same way ("
+                + ", ".join(mixed)
+                + "). The spread above mixes how the profiles differ with how they "
+                "were measured — aggregate runs that share the judge settings."
+            )
 
 
 if __name__ == "__main__":  # pragma: no cover

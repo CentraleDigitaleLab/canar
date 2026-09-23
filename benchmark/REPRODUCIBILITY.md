@@ -50,15 +50,18 @@ runs, even on the same machine**:
   instead of an average of three. Measured on one unchanged input: 0.749 to
   0.905 across eight repeats. Averaging over several runs recovers what the
   three samples were meant to give — `harness/aggregate_runs.py` does it, and
-  reports the spread rather than hiding it.
+  reports the spread rather than hiding it. Within a single run,
+  `judge_repeats` does the same per question: it asks the judge again, gets the
+  three questions answer relevancy is meant to average, and writes the spread
+  of the draws next to each score (see `CONFIG.md`).
 
 Treat these as **indicative**, not exact. Report them as trends, ideally
 averaged over a few runs.
 
 ## Provenance
 
-Every `metrics.csv` row carries `embed_model`, `collection`, `judge_model` and
-`git_commit` (of the canar code). Two results are only comparable when these
+Every `metrics.csv` row carries `embed_model`, `collection`, `judge_model`,
+`judge_repeats`, `judge_temperature` and `git_commit` (of the canar code). Two results are only comparable when these
 match — so always check provenance before comparing numbers across machines.
 
 Each run folder also has a `run_context.txt` with what is shared by every
@@ -82,4 +85,7 @@ hold it. That's the fastest way to tell whether two runs are comparable.
 - Pin the utilitR commit (done in `SETUP.md`) and agree on the embedding model.
 - Use a **shared Qdrant** so everyone queries the same collection (removes
   ingestion/HNSW variation) — a team infra decision.
-- For answer scores, use a hosted/deterministic judge, or average several runs.
+- For answer scores, use a hosted/deterministic judge, or average: several
+  judgements per question with `judge_repeats`, several runs with
+  `aggregate_runs.py`. The first measures the judge's noise; the second also
+  includes the generator's.
