@@ -11,7 +11,7 @@ run:                         # how the benchmark runs
   agent: r_helpdesk
   limit: null                # null = all questions; int = quick subset
   judge_model: gemma3:12b    # RAGAS judge; null = use the product LLM
-  judge_repeats: 1           # judge each question N times (see "Judge repetition")
+  judge_repeats: 3           # judge each question N times (see "Judge repetition")
   judge_temperature: 0.3     # judge sampling temperature, used when repeating
   gen_max_tokens: 8192       # generation budget (see note below)
   measure_resources: false   # true = also measure CPU/memory/GPU per phase
@@ -121,7 +121,7 @@ the original #53 confusion).
 Needs `psutil` (in the `benchmark` extra, which also carries `nvidia-ml-py`;
 without a GPU the run-context GPU fields are simply absent).
 
-## Judge repetition (optional)
+## Judge repetition
 
 The RAGAS judge is an LLM and scores the same answer differently from one call
 to the next. `judge_repeats: N` judges every question N times per metric, after
@@ -136,8 +136,12 @@ measurement repeats.
 | `faithfulness_sd`, `answer_relevancy_sd` | `comparison_*.csv` | mean per-question spread for the profile |
 
 A draw that fails — unparseable judge output, a server error — costs that draw,
-not the question. The spread columns only appear when `judge_repeats` > 1, and
-`judge_repeats: 1` leaves the run as it was.
+not the question.
+
+The default is 3: a single judgement cannot tell a difference between profiles
+from the judge's own noise, which is what the benchmark is for. For a quick
+pass, `JUDGE_REPEATS=1` judges once and skips the spread columns, which is how
+the benchmark worked before.
 
 `judge_temperature` matters: RAGAS otherwise forces 0.01, at which the draws
 come back near-identical and the spread says nothing about the judge. Both

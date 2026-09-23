@@ -32,7 +32,7 @@ class BenchConfig:
     agent: str = "r_helpdesk"
     limit: int | None = None           # None = all questions
     judge_model: str | None = None     # None = fall back to the product LLM
-    judge_repeats: int = 1             # judge each question N times (mean + spread)
+    judge_repeats: int = 3             # judge each question N times (mean + spread)
     judge_temperature: float = 0.3     # judge sampling temperature when repeating
     gen_max_tokens: int = 8192
     measure_resources: bool = False    # measure CPU/memory/GPU cost per phase
@@ -62,7 +62,7 @@ def load_config(path: str | Path) -> BenchConfig:
         agent=run.get("agent", "r_helpdesk"),
         limit=run.get("limit"),
         judge_model=run.get("judge_model"),
-        judge_repeats=run.get("judge_repeats", 1),
+        judge_repeats=run.get("judge_repeats", 3),
         judge_temperature=run.get("judge_temperature", 0.3),
         gen_max_tokens=run.get("gen_max_tokens", 8192),
         measure_resources=run.get("measure_resources", False),
